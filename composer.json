@@ -18,15 +18,15 @@
     "license": "MIT",
     "type": "library",
     "require": {
-        "php": ">=7.2",
-        "webonyx/graphql-php": "~0.10.2"
+        "php":                 ">=7.2",
+        "webonyx/graphql-php": "^14.6",
+        "laravel/helpers":     "^1.4",
+        "ext-json":            "*",
+        "mockery/mockery": "^1.4"
     },
     "require-dev": {
-        "orchestra/testbench": "3.1.*|3.2.*|3.3.*|3.4.*|3.5.*",
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "satooshi/php-coveralls": "^1.0",
-        "phpunit/phpunit": "~4.0|~5.0|~5.7|~6.0"
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.0"
     },
     "autoload": {
         "psr-0": {
@@ -37,9 +37,6 @@
         "classmap": [
             "tests/"
         ]
-    },
-    "suggest": {
-        "rebing/graphql-laravel": "folklore/graphql is no longuer maintained. Please use rebing/graphql-laravel"
     },
     "extra": {
         "laravel": {

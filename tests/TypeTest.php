@@ -13,16 +13,18 @@ class TypeTest extends TestCase
      */
     public function testGetFields()
     {
-        $type = new ExampleType();
+        $type   = new ExampleType();
         $fields = $type->getFields();
-        
+
         $this->assertArrayHasKey('test', $fields);
-        $this->assertEquals($fields['test'], [
-            'type' => Type::string(),
-            'description' => 'A test field'
-        ]);
+        $this->assertEquals(
+            $fields['test'], [
+            'type'        => Type::string(),
+            'description' => 'A test field',
+        ]
+        );
     }
-       
+
     /**
      * Test get attributes
      *
@@ -30,15 +32,15 @@ class TypeTest extends TestCase
      */
     public function testGetAttributes()
     {
-        $type = new ExampleType();
+        $type       = new ExampleType();
         $attributes = $type->getAttributes();
-        
+
         $this->assertArrayHasKey('name', $attributes);
         $this->assertArrayHasKey('fields', $attributes);
         $this->assertInstanceOf(Closure::class, $attributes['fields']);
-        $this->assertInternalType('array', $attributes['fields']());
+        $this->assertIsArray($attributes['fields']());
     }
-    
+
     /**
      * Test get attributes fields closure
      *
@@ -47,16 +49,16 @@ class TypeTest extends TestCase
     public function testGetAttributesFields()
     {
         $type = $this->getMockBuilder(ExampleType::class)
-                    ->setMethods(['getFields'])
-                    ->getMock();
+            ->setMethods(['getFields'])
+            ->getMock();
 
         $type->expects($this->once())
             ->method('getFields');
-        
+
         $attributes = $type->getAttributes();
         $attributes['fields']();
     }
-       
+
     /**
      * Test to array
      *
@@ -64,15 +66,15 @@ class TypeTest extends TestCase
      */
     public function testToArray()
     {
-        $type = new ExampleType();
+        $type  = new ExampleType();
         $array = $type->toArray();
-        
-        $this->assertInternalType('array', $array);
-        
+
+        $this->assertIsArray($array);
+
         $attributes = $type->getAttributes();
         $this->assertEquals($attributes, $array);
     }
-       
+
     /**
      * Test to type
      *
@@ -80,13 +82,13 @@ class TypeTest extends TestCase
      */
     public function testToType()
     {
-        $type = new ExampleType();
+        $type       = new ExampleType();
         $objectType = $type->toType();
-        
+
         $this->assertInstanceOf(ObjectType::class, $objectType);
-        
+
         $this->assertEquals($objectType->name, $type->name);
-        
+
         $fields = $objectType->getFields();
         $this->assertArrayHasKey('test', $fields);
     }

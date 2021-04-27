@@ -75,6 +75,8 @@ class ConfigTest extends TestCase
 
     public function testRouteQuery()
     {
+        $this->withoutExceptionHandling();
+
         $response = $this->call('GET', '/graphql_test/query', [
             'query' => $this->queries['examplesCustom']
         ]);

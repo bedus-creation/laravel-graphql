@@ -27,7 +27,7 @@ class GraphiQLTest extends TestCase
         $this->assertEquals(200, $response->status());
         $this->assertEquals($queryPath, $response->original->graphqlPath);
         $content = $response->getContent();
-        $this->assertContains($queryPath, $content);
+        $this->assertStringContainsString($queryPath, $content);
     }
 
     /**
@@ -42,6 +42,6 @@ class GraphiQLTest extends TestCase
         $this->assertEquals(200, $response->status());
         $this->assertEquals($queryPath, $response->original->graphqlPath);
         $content = $response->getContent();
-        $this->assertContains($queryPath, $content);
+        $this->assertStringContainsString($queryPath, $content);
     }
 }

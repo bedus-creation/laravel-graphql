@@ -10,42 +10,48 @@ class TestCase extends BaseTestCase
     /**
      * Setup the test environment.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->queries = include(__DIR__.'/Objects/queries.php');
-        $this->data = include(__DIR__.'/Objects/data.php');
+        $this->data    = include(__DIR__.'/Objects/data.php');
     }
 
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('graphql.schemas.default', [
-            'query' => [
-                'examples' => ExamplesQuery::class,
-                'examplesContext' => ExamplesContextQuery::class,
-                'examplesRoot' => ExamplesRootQuery::class,
-                'examplesAuthorize' => ExamplesAuthorizeQuery::class,
+        $app['config']->set(
+            'graphql.schemas.default', [
+            'query'    => [
+                'examples'              => ExamplesQuery::class,
+                'examplesContext'       => ExamplesContextQuery::class,
+                'examplesRoot'          => ExamplesRootQuery::class,
+                'examplesAuthorize'     => ExamplesAuthorizeQuery::class,
                 'examplesAuthenticated' => ExamplesAuthenticatedQuery::class,
-                'examplesPagination' => ExamplesPaginationQuery::class,
+                'examplesPagination'    => ExamplesPaginationQuery::class,
             ],
             'mutation' => [
-                'updateExample' => UpdateExampleMutation::class
-            ]
-        ]);
+                'updateExample' => UpdateExampleMutation::class,
+            ],
+        ]
+        );
 
-        $app['config']->set('graphql.schemas.custom', [
-            'query' => [
+        $app['config']->set(
+            'graphql.schemas.custom', [
+            'query'    => [
                 'examplesCustom' => ExamplesQuery::class,
             ],
             'mutation' => [
-                'updateExampleCustom' => UpdateExampleMutation::class
-            ]
-        ]);
+                'updateExampleCustom' => UpdateExampleMutation::class,
+            ],
+        ]
+        );
 
-        $app['config']->set('graphql.types', [
-            'Example' => ExampleType::class
-        ]);
+        $app['config']->set(
+            'graphql.types', [
+            'Example' => ExampleType::class,
+        ]
+        );
     }
 
     protected function assertGraphQLSchema($schema)
@@ -56,13 +62,13 @@ class TestCase extends BaseTestCase
     protected function assertGraphQLSchemaHasQuery($schema, $key)
     {
         //Query
-        $query = $schema->getQueryType();
+        $query       = $schema->getQueryType();
         $queryFields = $query->getFields();
         $this->assertArrayHasKey($key, $queryFields);
 
-        $queryField = $queryFields[$key];
+        $queryField    = $queryFields[$key];
         $queryListType = $queryField->getType();
-        $queryType = $queryListType->getWrappedType();
+        $queryType     = $queryListType->getWrappedType();
         $this->assertInstanceOf('GraphQL\Type\Definition\FieldDefinition', $queryField);
         $this->assertInstanceOf('GraphQL\Type\Definition\ListOfType', $queryListType);
         $this->assertInstanceOf('GraphQL\Type\Definition\ObjectType', $queryType);
@@ -71,12 +77,12 @@ class TestCase extends BaseTestCase
     protected function assertGraphQLSchemaHasMutation($schema, $key)
     {
         //Mutation
-        $mutation = $schema->getMutationType();
+        $mutation       = $schema->getMutationType();
         $mutationFields = $mutation->getFields();
         $this->assertArrayHasKey($key, $mutationFields);
 
         $mutationField = $mutationFields[$key];
-        $mutationType = $mutationField->getType();
+        $mutationType  = $mutationField->getType();
         $this->assertInstanceOf('GraphQL\Type\Definition\FieldDefinition', $mutationField);
         $this->assertInstanceOf('GraphQL\Type\Definition\ObjectType', $mutationType);
     }
@@ -84,14 +90,14 @@ class TestCase extends BaseTestCase
     protected function getPackageProviders($app)
     {
         return [
-            \Folklore\GraphQL\ServiceProvider::class
+            \Folklore\GraphQL\ServiceProvider::class,
         ];
     }
 
     protected function getPackageAliases($app)
     {
         return [
-            'GraphQL' => \Folklore\GraphQL\Support\Facades\GraphQL::class
+            'GraphQL' => \Folklore\GraphQL\Support\Facades\GraphQL::class,
         ];
     }
 }
