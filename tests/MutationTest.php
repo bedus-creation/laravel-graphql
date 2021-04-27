@@ -13,11 +13,13 @@ class MutationTest extends FieldTest
     {
         parent::getEnvironmentSetUp($app);
 
-        $app['config']->set('graphql.types', [
-            'Example' => ExampleType::class,
-            'ExampleValidationInputObject' => ExampleValidationInputObject::class,
+        $app['config']->set(
+            'graphql.types', [
+            'Example'                            => ExampleType::class,
+            'ExampleValidationInputObject'       => ExampleValidationInputObject::class,
             'ExampleNestedValidationInputObject' => ExampleNestedValidationInputObject::class,
-        ]);
+        ]
+        );
     }
 
     /**
@@ -31,7 +33,7 @@ class MutationTest extends FieldTest
         $field = new $class();
         $rules = $field->getRules();
 
-        $this->assertInternalType('array', $rules);
+        $this->assertIsArray($rules);
         $this->assertArrayHasKey('test', $rules);
         $this->assertArrayHasKey('test_with_rules', $rules);
         $this->assertArrayHasKey('test_with_rules_closure', $rules);
@@ -55,35 +57,38 @@ class MutationTest extends FieldTest
     {
         $class = $this->getFieldClass();
         $field = $this->getMockBuilder($class)
-                    ->setMethods(['resolve'])
-                    ->getMock();
+            ->setMethods(['resolve'])
+            ->getMock();
 
         $field->expects($this->once())
             ->method('resolve');
 
         $attributes = $field->getAttributes();
-        $attributes['resolve'](null, [
-            'test' => 'test',
-            'test_with_rules' => 'test',
-            'test_with_rules_closure' => 'test',
+        $attributes['resolve'](
+            null, [
+            'test'                         => 'test',
+            'test_with_rules'              => 'test',
+            'test_with_rules_closure'      => 'test',
             'test_with_rules_input_object' => [
-                'val' => 'test',
+                'val'  => 'test',
                 'nest' => ['email' => 'test@test.com'],
                 'list' => [
                     ['email' => 'test@test.com'],
                 ],
             ],
-        ], [], null);
+        ], [], null
+        );
     }
 
     /**
      * Test resolve throw validation error.
      *
      * @test
-     * @expectedException \Folklore\GraphQL\Error\ValidationError
      */
     public function testResolveThrowValidationError()
     {
+        $this->expectException(\Folklore\GraphQL\Error\ValidationError::class);
+
         $class = $this->getFieldClass();
         $field = new $class();
 
@@ -127,16 +132,18 @@ class MutationTest extends FieldTest
      */
     public function testCustomValidationErrorMessages()
     {
-        $class = $this->getFieldClass();
-        $field = new $class();
-        $rules = $field->getRules();
+        $class      = $this->getFieldClass();
+        $field      = new $class();
+        $rules      = $field->getRules();
         $attributes = $field->getAttributes();
         try {
-            $attributes['resolve'](null, [
-                 'test_with_rules_input_object' => [
-                     'nest' => ['email' => 'invalidTestEmail.com'],
-                 ],
-             ], [], null);
+            $attributes['resolve'](
+                null, [
+                'test_with_rules_input_object' => [
+                    'nest' => ['email' => 'invalidTestEmail.com'],
+                ],
+            ], [], null
+            );
         } catch (\Folklore\GraphQL\Error\ValidationError $e) {
             $messages = $e->getValidatorMessages();
 

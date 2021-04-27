@@ -91,7 +91,7 @@ trait ShouldValidate
 
             // then recursively call the parent method to see if this is an
             // input object, passing in the new prefix
-            $rules = array_merge($rules, $this->inferRulesFromType($field->type, $key, $resolutionArguments));
+            $rules = array_merge($rules, $this->inferRulesFromType($field->getType(), $key, $resolutionArguments));
         }
 
         return $rules;

@@ -1,6 +1,6 @@
 <?php
 
-use Folklore\Support\Field;
+
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 
@@ -18,19 +18,19 @@ class FieldTest extends TestCase
      */
     public function testGetAttributes()
     {
-        $class = $this->getFieldClass();
-        $field = new $class();
+        $class      = $this->getFieldClass();
+        $field      = new $class();
         $attributes = $field->getAttributes();
-        
+
         $this->assertArrayHasKey('name', $attributes);
         $this->assertArrayHasKey('type', $attributes);
         $this->assertArrayHasKey('args', $attributes);
         $this->assertArrayHasKey('resolve', $attributes);
-        $this->assertInternalType('array', $attributes['args']);
+        $this->assertIsArray($attributes['args']);
         $this->assertInstanceOf(Closure::class, $attributes['resolve']);
         $this->assertInstanceOf(get_class($field->type()), $attributes['type']);
     }
-    
+
     /**
      * Test resolve closure
      *
@@ -40,16 +40,16 @@ class FieldTest extends TestCase
     {
         $class = $this->getFieldClass();
         $field = $this->getMockBuilder($class)
-                    ->setMethods(['resolve'])
-                    ->getMock();
+            ->setMethods(['resolve'])
+            ->getMock();
 
         $field->expects($this->once())
             ->method('resolve');
-        
+
         $attributes = $field->getAttributes();
         $attributes['resolve'](null, [], [], null);
     }
-       
+
     /**
      * Test to array
      *
@@ -60,9 +60,9 @@ class FieldTest extends TestCase
         $class = $this->getFieldClass();
         $field = new $class();
         $array = $field->toArray();
-        
-        $this->assertInternalType('array', $array);
-        
+
+        $this->assertIsArray($array);
+
         $attributes = $field->getAttributes();
         $this->assertEquals($attributes, $array);
     }
